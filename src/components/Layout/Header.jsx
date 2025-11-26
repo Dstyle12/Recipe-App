@@ -1,9 +1,10 @@
 import './Header.css'
-const Header = ({onAddRecipe, onSortChange})=>{
+import { Link } from 'react-router-dom'
+const Header = ({onSortChange})=>{
     return (
         <header className='header'>
             <div className='header-left'>
-                <button className='add-recipe-btn' onClick={onAddRecipe}>+ Add Recipe</button>
+                <Link className='add-recipe-btn' to="/create-recipe">+ Add Recipe</Link>
             </div>
             <div className='header-center'>
                 <h1 className='app-title'>MY RECIPE APP</h1>
