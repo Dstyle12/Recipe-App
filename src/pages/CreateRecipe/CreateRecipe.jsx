@@ -1,9 +1,11 @@
 import { useState, useRef } from "react";
 import {useNavigate} from 'react-router-dom'
+import { useRecipes } from "../../hooks/useRecipes";
 import './CreateRecipe.css'
 
 const CreateRecipe = () =>{
     const navigate = useNavigate()
+    const { createRecipe } = useRecipes()
     const fileInputRef = useRef(null)
     const [formData, setFormData] = useState({
         name : '',
@@ -60,6 +62,33 @@ const CreateRecipe = () =>{
     const handleIngredientChange = (field, value) =>{
         setCurrentIngredient(prev=>({...prev, [field]:value}))
     }
+    const handleAddRecipe = async () => {
+    if (!formData.name.trim()) {
+      alert('Please enter recipe name');
+      return;
+    }
+    if (ingredients.length === 0) {
+      alert('Please add at least one ingredient');
+      return;
+    }
+    try {
+      const recipeData = {
+        title: formData.name,
+        description: formData.description,
+        ingredients: ingredients.map(ing => ({
+          ingredientId: Date.now() + Math.random(), 
+          amount: `${ing.weight}g`,
+          notes: `Quantity: ${ing.quantity}`
+        })),
+      };
+      await createRecipe(recipeData);
+      navigate('/');
+    } catch (error) {
+      console.error('Error creating recipe:', error);
+      alert('Failed to create recipe. Please try again.');
+    }
+  };
+  const isAddButtonActive = formData.name.trim() && ingredients.length > 0
     return (
         <div className="create-recipe-page">
             <header className="create-recipe-header">
@@ -122,7 +151,7 @@ const CreateRecipe = () =>{
                     <div className="total-weight">
                         Total Weight: <strong>{totalWeight}g</strong>
                     </div>
-                    <button type="button" className="add-recipe-button inactive" disabled>Add Recipe</button>
+                    <button type="button" className={`add-recipe-button ${isAddButtonActive ?  'active' : 'inactive'}`} disabled={!isAddButtonActive} onClick={handleAddRecipe}>Add Recipe</button>
                 </div>
             </main>
         </div>
