@@ -64,29 +64,31 @@ const CreateRecipe = () =>{
     }
     const handleAddRecipe = async () => {
     if (!formData.name.trim()) {
-      alert('Please enter recipe name');
-      return;
+      alert('Please enter recipe name')
+      return
     }
     if (ingredients.length === 0) {
-      alert('Please add at least one ingredient');
-      return;
+      alert('Please add at least one ingredient')
+      return
     }
     try {
-      const recipeData = {
-        title: formData.name,
-        description: formData.description,
-        ingredients: ingredients.map(ing => ({
-          ingredientId: Date.now() + Math.random(), 
-          amount: `${ing.weight}g`,
-          notes: `Quantity: ${ing.quantity}`
-        })),
-      };
-      await createRecipe(recipeData);
-      navigate('/');
-    } catch (error) {
-      console.error('Error creating recipe:', error);
-      alert('Failed to create recipe. Please try again.');
-    }
+    const recipeData = {
+      title: formData.name,
+      description: formData.description,
+      ingredients: ingredients.map(ing => ({
+        ingredientId: Date.now() + Math.random(), 
+        amount: `${ing.weight}g`,
+        notes: `Quantity: ${ing.quantity}`
+      })),
+    };
+    console.log('📤 Sending recipe data:', recipeData);
+    await createRecipe(recipeData);
+    alert('Recipe created successfully!');
+    navigate('/');
+  } catch (error) {
+    console.error('❌ Error creating recipe:', error);
+    alert('Failed to create recipe. Please try again.');
+  }
   };
   const isAddButtonActive = formData.name.trim() && ingredients.length > 0
     return (

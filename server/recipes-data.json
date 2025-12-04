@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1764797645439",
+    "title": "fgfdfdd",
+    "description": "ererer",
+    "ingredients": [
+      {
+        "ingredientId": 1764797645414.5254,
+        "amount": "2123g",
+        "notes": "Quantity: 12"
+      },
+      {
+        "ingredientId": 1764797645414.8674,
+        "amount": "3213g",
+        "notes": "Quantity: 2"
+      }
+    ],
+    "createdAt": "2025-12-03T21:34:05.439Z",
+    "totalWeight": 5336,
+    "ingredientsCount": 2
+  }
+]

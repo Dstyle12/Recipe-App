@@ -3,22 +3,29 @@ const API_BASE = 'http://localhost:3001/api'
 const api = axios.create({
     baseURL: API_BASE,
     timeout: 10000,
-    headers:{
-        'Content-Type': 'application/json'
-    }
+    headers: {
+    'Content-Type': 'application/json',
+  },
 })
+api.interceptors.request.use(
+  (config) => {
+    console.log(`🚀 ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`)
+    return config
+  },
+  (error) => {
+    console.error('❌ Request Error:', error.message)
+    return Promise.reject(error)
+  }
+)
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-    console.error('🔴 API Error Details:');
-    console.error('URL:', error.config?.url);
-    console.error('Method:', error.config?.method);
-    console.error('Full Error:', error);
-    
-    if (error.code === 'ECONNREFUSED') {
-      console.error('🚨 Backend is not running!');
-      console.error('💡 Run: cd server && node server.js');
-    }
+        console.error('❌ Response Error:', {
+          url: error.config?.url,
+          method: error.config?.method,
+          status: error.response?.status,
+          message: error.message,
+        });
         return Promise.reject(error)
     }
 )
@@ -32,7 +39,12 @@ export const recipeAPI = {
         return response.data
     },
     create: async (recipeData) => {
-    const response = await api.post('/recipes', recipeData)
+    const config = recipeData instanceof FormData ? {
+      headers:{
+        'Content-Type': 'multipart/form-data'
+      }
+    } : {}
+    const response = await api.post('/recipes', recipeData,config)
     return response.data
   },
   update: async (id, updates) => {
