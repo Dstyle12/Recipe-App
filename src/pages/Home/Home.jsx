@@ -1,13 +1,15 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Header from '../../components/Layout/Header'
 import { useRecipes } from '../../hooks/useRecipes'
 import './Home.css'
 const Home = () =>{
      const { recipes, loading, error } = useRecipes()
+     const [sortBy, setSortBy] = useState('newest')
     
     const handleSortChange = (event) => {
         const sortValue = event.target.value
         console.log(sortValue)
+        setSortBy(sortValue)
     }
     const calculateTotalWeight = (recipe) =>{
       if(recipe.totalWeight !== undefined && recipe.totalWeight!== null) return recipe.totalWeight
@@ -49,17 +51,67 @@ const Home = () =>{
       if(recipe.createdAt) return recipe.createdAt
       return new Date().toISOString()
     }
-    const sortedRecipes = [...recipes].sort((a,b)=>{
-      try{
-          const dateA = new Date(getCreatedAt(a))
-          const dateB = new Date(getCreatedAt(b))
-          return dateB - dateA
+    const sortRecipes = (recipesToSort) =>{
+      if(!recipesToSort.length) return []
+      const sorted = [...recipesToSort]
+      switch(sortBy){
+        case 'newest':
+          return sorted.sort((a,b)=>{
+            const dateA = new Date(getCreatedAt(a))
+            const dateB = new Date(getCreatedAt(b))
+            return dateB - dateA
+          })
+        case 'oldest':
+           return sorted.sort((a,b)=>{
+            const dateA = new Date(getCreatedAt(a))
+            const dateB = new Date(getCreatedAt(b))
+            return dateA - dateB
+          })
+        case 'name-asc':
+          return sorted.sort((a,b)=>{
+            const titleA = (a.title || '').toLowerCase()
+            const titleB = (b.title || '').toLowerCase()
+            return titleA.localeCompare(titleB)
+          })
+        case 'name-desc':
+          return sorted.sort((a,b)=>{
+            const titleA = (a.title || '').toLowerCase()
+            const titleB = (b.title || '').toLowerCase()
+            return titleB.localeCompare(titleA)
+          })
+        case 'weight-asc':
+          return sorted.sort((a,b)=>{
+            const weightA = calculateTotalWeight(a)
+            const weightB = calculateTotalWeight(b)
+            return weightA - weightB
+          })
+        case 'weight-desc':
+          return sorted.sort((a,b)=>{
+            const weightA = calculateTotalWeight(a)
+            const weightB = calculateTotalWeight(b)
+            return weightB - weightA
+          })
+        case 'ingredients-asc':
+          return sorted.sort((a,b)=>{
+            const countA = getIngredientsCount(a)
+            const countB = getIngredientsCount(b)
+            return countA - countB
+          })
+        case 'ingredients-desc':
+          return sorted.sort((a,b)=>{
+            const countA = getIngredientsCount(a)
+            const countB = getIngredientsCount(b)
+            return countB - countA
+          })
+        default:
+          return sorted.sort((a,b)=>{
+            const dateA = new Date(getCreatedAt(a))
+            const dateB = new Date(getCreatedAt(b))
+            return dateB - dateA
+          })
       }
-      catch(error){
-         console.error('Error sorting by date:', error)
-         return 0
-      }
-    })
+    }
+    const sortedRecipes = sortRecipes(recipes)
     useEffect(() => {
     if (sortedRecipes.length > 0) {
       console.log('📊 Все рецепты с сервера:', sortedRecipes)
