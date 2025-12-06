@@ -23,6 +23,10 @@ const CreateRecipe = () =>{
     const handleImageUpload = (event) =>{
         const file = event.target.files[0]
         if(file){
+            if(file.size > 5 * 1024 * 1024){
+                alert('File is too big. Maximum size is 5MB')
+                return
+            }
             const imageUrl = URL.createObjectURL(file)
             setFormData(prev=>({
                 ...prev,
@@ -72,24 +76,31 @@ const CreateRecipe = () =>{
       return
     }
     try {
-    const recipeData = {
-      title: formData.name,
-      description: formData.description,
-      ingredients: ingredients.map(ing => ({
+    const ingredientsData =
+      ingredients.map(ing => ({
         ingredientId: Date.now() + Math.random(), 
         amount: `${ing.weight}g`,
         notes: `Quantity: ${ing.quantity}`
-      })),
-    };
-    console.log('📤 Sending recipe data:', recipeData);
-    await createRecipe(recipeData);
+      }))
+    
+    console.log('📦 Ingredients to send:', ingredientsData)
+     const formDataToSend = new FormData()
+    formDataToSend.append('title',formData.name)
+    formDataToSend.append('description',formData.description)
+    formDataToSend.append('ingredients',JSON.stringify(ingredientsData))
+    if(formData.image){
+        console.log('📸 Adding image to FormData')
+        formDataToSend.append('image',formData.image)
+    } 
+    console.log('📤 Sending recipe data...')
+    await createRecipe(formDataToSend);
     alert('Recipe created successfully!');
     navigate('/');
   } catch (error) {
     console.error('❌ Error creating recipe:', error);
     alert('Failed to create recipe. Please try again.');
   }
-  };
+  }
   const isAddButtonActive = formData.name.trim() && ingredients.length > 0
     return (
         <div className="create-recipe-page">

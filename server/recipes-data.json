@@ -18,5 +18,41 @@
     "createdAt": "2025-12-03T21:34:05.439Z",
     "totalWeight": 5336,
     "ingredientsCount": 2
+  },
+  {
+    "id": "1765014598467",
+    "title": "Антони",
+    "description": "Гоат, просто лучший, легенда",
+    "ingredients": [],
+    "imageUrl": null,
+    "createdAt": "2025-12-06T09:49:58.467Z",
+    "totalWeight": 0,
+    "ingredientsCount": 0
+  },
+  {
+    "id": "1765014709691",
+    "title": "Пример",
+    "description": "",
+    "ingredients": [],
+    "imageUrl": null,
+    "createdAt": "2025-12-06T09:51:49.691Z",
+    "totalWeight": 0,
+    "ingredientsCount": 0
+  },
+  {
+    "id": "1765020938609",
+    "title": "Очередная проверка",
+    "description": "",
+    "ingredients": [
+      {
+        "ingredientId": 1765020938577.0422,
+        "amount": "10g",
+        "notes": "Quantity: 2"
+      }
+    ],
+    "imageUrl": "/uploads/1765020938591-664497263-photo-2024-10-30-21-15-20.jpg",
+    "createdAt": "2025-12-06T11:35:38.609Z",
+    "totalWeight": 10,
+    "ingredientsCount": 1
   }
 ]

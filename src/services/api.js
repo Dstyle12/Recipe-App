@@ -2,14 +2,12 @@ import axios from 'axios'
 const API_BASE = 'http://localhost:3001/api'
 const api = axios.create({
     baseURL: API_BASE,
-    timeout: 10000,
-    headers: {
-    'Content-Type': 'application/json',
-  },
+    timeout: 30000
 })
 api.interceptors.request.use(
   (config) => {
     console.log(`🚀 ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`)
+    if(config.data instanceof FormData) delete config.headers['Content-Type']
     return config
   },
   (error) => {
@@ -39,11 +37,9 @@ export const recipeAPI = {
         return response.data
     },
     create: async (recipeData) => {
-    const config = recipeData instanceof FormData ? {
-      headers:{
+    const config = recipeData instanceof FormData ? {} : { headers:{
         'Content-Type': 'multipart/form-data'
-      }
-    } : {}
+      }}
     const response = await api.post('/recipes', recipeData,config)
     return response.data
   },
