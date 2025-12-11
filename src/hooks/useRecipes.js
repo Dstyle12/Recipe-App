@@ -23,7 +23,7 @@ export const useRecipes = () => {
     console.log('🔄 Creating recipe...');
     try {
       const newRecipe = await recipeAPI.create(recipeData);
-      setRecipes(prev => [...prev, newRecipe]);
+      await loadRecipes()
       console.log('✅ Recipe created:', newRecipe.title)
       return newRecipe;
     } catch (err) {

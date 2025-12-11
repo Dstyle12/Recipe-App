@@ -1,11 +1,30 @@
 import { useEffect, useState } from 'react'
 import Header from '../../components/Layout/Header'
 import { useRecipes } from '../../hooks/useRecipes'
+import { recipeAPI } from '../../services/api'
 import './Home.css'
 const Home = () =>{
-     const { recipes, loading, error } = useRecipes()
+     const { recipes, loading, error, loadRecipes } = useRecipes()
      const [sortBy, setSortBy] = useState('newest')
-    
+     const [scrolled, setScrolled] = useState(false)
+     const [pinnedRecipeId, setPinnedRecipeId] = useState(null)
+    useEffect(()=>{
+      if(recipes.length>0){
+        const pinned = recipes.find(recipe => recipe.isPinned)
+        if(pinned) setPinnedRecipeId(pinned.id)
+        else setPinnedRecipeId(null)
+      }
+    }, [recipes])
+    useEffect(()=>{
+      const handleScroll = () =>{
+        const isScrolled = window.scrollY >50
+        if(isScrolled !== scrolled) setScrolled(isScrolled)
+      }
+    window.addEventListener('scroll',handleScroll,{passive:true})
+    return () =>{
+      window.addEventListener('scroll',handleScroll)
+    }
+    },[scrolled])
     const handleSortChange = (event) => {
         const sortValue = event.target.value
         console.log(sortValue)
@@ -51,83 +70,98 @@ const Home = () =>{
       if(recipe.createdAt) return recipe.createdAt
       return new Date().toISOString()
     }
+    const handlePinRecipe = async (recipeId, currentIsPinned)=>{
+      try{
+        const newPinnedState = !currentIsPinned
+        console.log(`📌 ${newPinnedState ? 'Pinning' : 'Unpinning'} recipe ${recipeId}`)
+        await recipeAPI.togglePin(recipeId,newPinnedState)
+        await loadRecipes()
+        if(newPinnedState) setPinnedRecipeId(recipeId)
+        else setPinnedRecipeId(null)
+      }
+      catch(error){
+        console.error('❌ Error toggling pin:', error);
+        alert('Failed to pin/unpin recipe. Please try again.');
+      }
+    }
     const sortRecipes = (recipesToSort) =>{
       if(!recipesToSort.length) return []
-      const sorted = [...recipesToSort]
+      const pinned = recipesToSort.filter(r=>r.isPinned)
+      const unpinned = recipesToSort.filter(r=>!r.isPinned)
+      let sortUnpinned = [...unpinned]
       switch(sortBy){
         case 'newest':
-          return sorted.sort((a,b)=>{
+           sortUnpinned.sort((a,b)=>{
             const dateA = new Date(getCreatedAt(a))
             const dateB = new Date(getCreatedAt(b))
             return dateB - dateA
           })
+          break
         case 'oldest':
-           return sorted.sort((a,b)=>{
+            sortUnpinned.sort((a,b)=>{
             const dateA = new Date(getCreatedAt(a))
             const dateB = new Date(getCreatedAt(b))
             return dateA - dateB
           })
+          break
         case 'name-asc':
-          return sorted.sort((a,b)=>{
+          sortUnpinned.sort((a,b)=>{
             const titleA = (a.title || '').toLowerCase()
             const titleB = (b.title || '').toLowerCase()
             return titleA.localeCompare(titleB)
           })
+          break
         case 'name-desc':
-          return sorted.sort((a,b)=>{
+           sortUnpinned.sort((a,b)=>{
             const titleA = (a.title || '').toLowerCase()
             const titleB = (b.title || '').toLowerCase()
             return titleB.localeCompare(titleA)
           })
+          break
         case 'weight-asc':
-          return sorted.sort((a,b)=>{
+          sortUnpinned.sort((a,b)=>{
             const weightA = calculateTotalWeight(a)
             const weightB = calculateTotalWeight(b)
             return weightA - weightB
           })
+          break
         case 'weight-desc':
-          return sorted.sort((a,b)=>{
+          sortUnpinned.sort((a,b)=>{
             const weightA = calculateTotalWeight(a)
             const weightB = calculateTotalWeight(b)
             return weightB - weightA
           })
+          break
         case 'ingredients-asc':
-          return sorted.sort((a,b)=>{
+          sortUnpinned.sort((a,b)=>{
             const countA = getIngredientsCount(a)
             const countB = getIngredientsCount(b)
             return countA - countB
           })
+          break
         case 'ingredients-desc':
-          return sorted.sort((a,b)=>{
+          sortUnpinned.sort((a,b)=>{
             const countA = getIngredientsCount(a)
             const countB = getIngredientsCount(b)
             return countB - countA
           })
+          break
         default:
-          return sorted.sort((a,b)=>{
+          sortUnpinned.sort((a,b)=>{
             const dateA = new Date(getCreatedAt(a))
             const dateB = new Date(getCreatedAt(b))
             return dateB - dateA
           })
       }
+      return [...pinned, ...sortUnpinned]
     }
     const sortedRecipes = sortRecipes(recipes)
-    useEffect(() => {
+      useEffect(() => {
     if (sortedRecipes.length > 0) {
-      console.log('📊 Все рецепты с сервера:', sortedRecipes)
-      sortedRecipes.forEach((recipe, index) => {
-        console.log(`Рецепт ${index + 1}:`, {
-          id: recipe.id,
-          title: recipe.title,
-          description: recipe.description?.substring(0, 50) + '...',
-          ingredientsCount: getIngredientsCount(recipe),
-          totalWeight: calculateTotalWeight(recipe),
-          createdAt: getCreatedAt(recipe),
-          imageUrl: recipe.imageUrl
-        })
-      })
+      console.log(`📊 Displaying ${sortedRecipes.length} recipes`);
+      console.log(`📍 Pinned recipe ID: ${pinnedRecipeId || 'None'}`);
     }
-  }, [sortedRecipes])
+  }, [sortedRecipes, pinnedRecipeId]);
   const formatDate = (dateString) => {
     try {
       const date = new Date(dateString);
@@ -192,8 +226,19 @@ const Home = () =>{
               const totalWeight = calculateTotalWeight(recipe)
               const createdAt = getCreatedAt(recipe)
               const imageUrl = getImageUrl(recipe)
+              const isPinned = recipe.isPinned || false
               return (
                 <div key={recipe.id || `recipe-${Math.random()}`} className='recipe-card'>
+                  <button 
+                    className={`pin-button ${isPinned ? 'pinned' : ''}`}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handlePinRecipe(recipe.id, isPinned)
+                    }}
+                    title={isPinned ? "Unpin recipe" : "Pin recipe"}
+                  >
+                    {isPinned ? '📌' : '📍'}
+                  </button>
                   <div className='recipe-date'>{formatDate(createdAt)}</div>
                   {imageUrl ? (
                     <img src={imageUrl} alt={safeTitle} className='recipe-image' onError={(e)=>{
@@ -214,7 +259,10 @@ const Home = () =>{
                     </div>
                   )}
                   <div className='recipe-content'>
-                    <h3 className='recipe-title'>{safeTitle}</h3>
+                    <h3 className='recipe-title'>
+                    {isPinned && <span className="pin-indicator">📌</span>}
+                    {safeTitle}
+                    </h3>
                     <p className='recipe-description'>{safeDescription}</p>
                     <div className='recipe-stats'>
                       <div className='stat-item'>

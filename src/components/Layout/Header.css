@@ -5,6 +5,13 @@
     padding: 20px 40px;
     background-color: #000;
     border-bottom: 3px solid #ffeb3b;
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index: 1000;
+    box-sizing: border-box;
+    height: 80px;
     margin-bottom: 40px;
 }
 

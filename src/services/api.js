@@ -43,6 +43,11 @@ export const recipeAPI = {
     const response = await api.post('/recipes', recipeData,config)
     return response.data
   },
+  togglePin: async(id,isPinned) =>{
+    console.log(`📌 ${isPinned ? 'Pinning' : 'Unpinning'} recipe ${id}`)
+    const response = await api.put(`/recipes/${id}/pin`, {isPinned})
+    return response.data
+  },
   update: async (id, updates) => {
     const response = await api.put(`/recipes/${id}`, updates)
     return response.data

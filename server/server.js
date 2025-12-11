@@ -100,21 +100,37 @@ app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
     timestamp: new Date().toISOString(),
-    recipesCount: recipes.length
+    recipesCount: recipes.length,
+    pinnedRecipes: recipes.filter(r => r.isPinned).length
   });
 });
 
 // Получить все рецепты
 app.get('/api/recipes', (req, res) => {
   console.log('📥 GET /api/recipes - Returning', recipes.length, 'recipes');
-  res.json(recipes);
+  
+  // Создаем копию массива для сортировки
+  const recipesToSend = [...recipes];
+  
+  // Сортируем: закрепленные сверху, затем по дате создания (новые сверху)
+  recipesToSend.sort((a, b) => {
+    // Сначала сравниваем по статусу закрепления
+    if (a.isPinned && !b.isPinned) return -1;
+    if (!a.isPinned && b.isPinned) return 1;
+    
+    // Если оба закреплены или не закреплены, сортируем по дате (новые сверху)
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+    return dateB - dateA;
+  });
+  
+  res.json(recipesToSend);
 });
 
-// Создать рецепт с изображением
+// Создать рецепт
 app.post('/api/recipes', upload.single('image'), (req, res) => {
-   console.log('📨 POST /api/recipes - Received body:', req.body);
+  console.log('📨 POST /api/recipes - Received data:', req.body);
   console.log('📷 File:', req.file);
-  console.log('📦 Raw ingredients string:', req.body.ingredients);
   
   try {
     let { title, description, ingredients } = req.body;
@@ -123,10 +139,8 @@ app.post('/api/recipes', upload.single('image'), (req, res) => {
     let parsedIngredients = [];
     try {
       parsedIngredients = ingredients ? JSON.parse(ingredients) : [];
-      console.log('✅ Parsed ingredients:', parsedIngredients);
     } catch (e) {
       console.warn('Failed to parse ingredients:', e.message);
-      console.log('Raw ingredients:', ingredients);
     }
 
     if (!title || !title.trim()) {
@@ -154,6 +168,9 @@ app.post('/api/recipes', upload.single('image'), (req, res) => {
       // Если есть файл, сохраняем путь к нему
       imageUrl: req.file ? `/uploads/${req.file.filename}` : null,
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      isPinned: false, // НОВОЕ ПОЛЕ: по умолчанию не закреплен
+      // Вычисляемые поля
       totalWeight: calculateTotalWeight(parsedIngredients),
       ingredientsCount: parsedIngredients.length
     };
@@ -175,6 +192,99 @@ app.post('/api/recipes', upload.single('image'), (req, res) => {
   }
 });
 
+// Закрепить/открепить рецепт
+app.put('/api/recipes/:id/pin', (req, res) => {
+  const recipeId = req.params.id;
+  const { isPinned } = req.body;
+  
+  console.log(`📌 PUT /api/recipes/${recipeId}/pin - isPinned: ${isPinned}`);
+  
+  // Находим рецепт
+  const recipeIndex = recipes.findIndex(r => r.id === recipeId);
+  
+  if (recipeIndex === -1) {
+    return res.status(404).json({ error: 'Recipe not found' });
+  }
+  
+  // Если закрепляем, сначала снимаем закрепление со всех других рецептов
+  if (isPinned) {
+    console.log('🔓 Unpinning all other recipes');
+    recipes.forEach(recipe => {
+      if (recipe.id !== recipeId && recipe.isPinned) {
+        recipe.isPinned = false;
+        recipe.updatedAt = new Date().toISOString();
+      }
+    });
+  }
+  
+  // Обновляем текущий рецепт
+  recipes[recipeIndex].isPinned = isPinned;
+  recipes[recipeIndex].updatedAt = new Date().toISOString();
+  
+  // Сохраняем в файл
+  saveRecipes(recipes);
+  
+  console.log(`✅ Recipe ${recipeId} ${isPinned ? 'pinned' : 'unpinned'}`);
+  
+  // Возвращаем обновленный рецепт
+  res.json(recipes[recipeIndex]);
+});
+
+// Обновить рецепт
+app.put('/api/recipes/:id', (req, res) => {
+  const recipeId = req.params.id;
+  const updates = req.body;
+  
+  console.log(`✏️ PUT /api/recipes/${recipeId} - Updates:`, updates);
+  
+  const recipeIndex = recipes.findIndex(r => r.id === recipeId);
+  
+  if (recipeIndex === -1) {
+    return res.status(404).json({ error: 'Recipe not found' });
+  }
+  
+  // Обновляем рецепт
+  recipes[recipeIndex] = {
+    ...recipes[recipeIndex],
+    ...updates,
+    updatedAt: new Date().toISOString()
+  };
+  
+  saveRecipes(recipes);
+  
+  console.log(`✅ Recipe ${recipeId} updated`);
+  res.json(recipes[recipeIndex]);
+});
+
+// Удалить рецепт
+app.delete('/api/recipes/:id', (req, res) => {
+  const recipeId = req.params.id;
+  
+  console.log(`🗑️ DELETE /api/recipes/${recipeId}`);
+  
+  const recipeIndex = recipes.findIndex(r => r.id === recipeId);
+  
+  if (recipeIndex === -1) {
+    return res.status(404).json({ error: 'Recipe not found' });
+  }
+  
+  // Если у рецепта есть изображение, удаляем файл
+  const recipe = recipes[recipeIndex];
+  if (recipe.imageUrl && recipe.imageUrl.startsWith('/uploads/')) {
+    const imagePath = path.join(__dirname, recipe.imageUrl);
+    if (fs.existsSync(imagePath)) {
+      fs.unlinkSync(imagePath);
+      console.log('🗑️ Deleted image:', imagePath);
+    }
+  }
+  
+  // Удаляем рецепт из массива
+  recipes.splice(recipeIndex, 1);
+  saveRecipes(recipes);
+  
+  console.log(`✅ Recipe ${recipeId} deleted`);
+  res.json({ message: 'Recipe deleted successfully' });
+});
 
 // Корневой путь
 app.get('/', (req, res) => {
@@ -182,7 +292,13 @@ app.get('/', (req, res) => {
     message: 'Recipe API is running!',
     endpoints: {
       health: '/api/health',
-      recipes: '/api/recipes'
+      recipes: {
+        getAll: 'GET /api/recipes',
+        create: 'POST /api/recipes',
+        update: 'PUT /api/recipes/:id',
+        delete: 'DELETE /api/recipes/:id',
+        pin: 'PUT /api/recipes/:id/pin'
+      }
     }
   });
 });
@@ -194,11 +310,24 @@ app.listen(PORT, () => {
 📍 Сервер: http://localhost:${PORT}
 
 📡 Доступные эндпоинты:
-   GET  /api/health    - Проверка здоровья
-   GET  /api/recipes   - Получить все рецепты
-   POST /api/recipes   - Создать новый рецепт
+   GET    /api/health          - Проверка здоровья
+   GET    /api/recipes         - Все рецепты
+   POST   /api/recipes         - Создать рецепт
+   PUT    /api/recipes/:id     - Обновить рецепт
+   PUT    /api/recipes/:id/pin - Закрепить/открепить рецепт
+   DELETE /api/recipes/:id     - Удалить рецепт
 
 💾 Данные сохраняются в файл: recipes-data.json
 📁 Изображения сохраняются в: server/uploads
+📌 Поддержка закрепления рецептов: ✅ Включена
   `);
+  
+  // Статистика при запуске
+  const pinnedCount = recipes.filter(r => r.isPinned).length;
+  if (pinnedCount > 0) {
+    const pinnedRecipe = recipes.find(r => r.isPinned);
+    console.log(`📌 Закреплен рецепт: "${pinnedRecipe.title}" (ID: ${pinnedRecipe.id})`);
+  } else {
+    console.log('📌 Закрепленных рецептов нет');
+  }
 });

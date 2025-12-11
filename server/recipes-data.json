@@ -17,7 +17,9 @@
     ],
     "createdAt": "2025-12-03T21:34:05.439Z",
     "totalWeight": 5336,
-    "ingredientsCount": 2
+    "ingredientsCount": 2,
+    "isPinned": false,
+    "updatedAt": "2025-12-10T18:29:09.650Z"
   },
   {
     "id": "1765014598467",
@@ -37,7 +39,9 @@
     "imageUrl": null,
     "createdAt": "2025-12-06T09:51:49.691Z",
     "totalWeight": 0,
-    "ingredientsCount": 0
+    "ingredientsCount": 0,
+    "isPinned": false,
+    "updatedAt": "2025-12-11T17:51:21.510Z"
   },
   {
     "id": "1765020938609",
@@ -54,5 +58,28 @@
     "createdAt": "2025-12-06T11:35:38.609Z",
     "totalWeight": 10,
     "ingredientsCount": 1
+  },
+  {
+    "id": "1765391558609",
+    "title": "Лучезарный",
+    "description": "best man on earth",
+    "ingredients": [
+      {
+        "ingredientId": 1765391558582.015,
+        "amount": "1000g",
+        "notes": "Quantity: 1"
+      },
+      {
+        "ingredientId": 1765391558582.1802,
+        "amount": "700g",
+        "notes": "Quantity: 1"
+      }
+    ],
+    "imageUrl": "/uploads/1765391558595-740310528---------.jpg",
+    "createdAt": "2025-12-10T18:32:38.609Z",
+    "updatedAt": "2025-12-10T18:32:38.609Z",
+    "isPinned": false,
+    "totalWeight": 1700,
+    "ingredientsCount": 2
   }
 ]
