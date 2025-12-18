@@ -66,18 +66,20 @@
     "ingredients": [
       {
         "ingredientId": 1765391558582.015,
+        "name": "Название ингредиента 1",
         "amount": "1000g",
         "notes": "Quantity: 1"
       },
       {
         "ingredientId": 1765391558582.1802,
+        "name": "Название ингредиента 2",
         "amount": "700g",
         "notes": "Quantity: 1"
       }
     ],
     "imageUrl": "/uploads/1765391558595-740310528---------.jpg",
     "createdAt": "2025-12-10T18:32:38.609Z",
-    "updatedAt": "2025-12-10T18:32:38.609Z",
+    "updatedAt": "2025-12-17T21:39:53.869Z",
     "isPinned": false,
     "totalWeight": 1700,
     "ingredientsCount": 2

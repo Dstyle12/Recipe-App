@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState} from 'react'
 import Header from '../../components/Layout/Header'
 import { useRecipes } from '../../hooks/useRecipes'
 import { recipeAPI } from '../../services/api'
+import { useNavigate } from 'react-router'
 import './Home.css'
 const Home = () =>{
      const { recipes, loading, error, loadRecipes } = useRecipes()
      const [sortBy, setSortBy] = useState('newest')
      const [scrolled, setScrolled] = useState(false)
      const [pinnedRecipeId, setPinnedRecipeId] = useState(null)
+     const navigate = useNavigate()
     useEffect(()=>{
       if(recipes.length>0){
         const pinned = recipes.find(recipe => recipe.isPinned)
@@ -228,7 +230,7 @@ const Home = () =>{
               const imageUrl = getImageUrl(recipe)
               const isPinned = recipe.isPinned || false
               return (
-                <div key={recipe.id || `recipe-${Math.random()}`} className='recipe-card'>
+                <div key={recipe.id || `recipe-${Math.random()}`} className='recipe-card' onClick={()=>navigate(`/recipe/${recipe.id}`)}>
                   <button 
                     className={`pin-button ${isPinned ? 'pinned' : ''}`}
                     onClick={(e) => {

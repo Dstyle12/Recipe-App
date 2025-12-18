@@ -61,6 +61,7 @@ app.use(express.json());
 
 // Путь к файлу данных
 const DATA_FILE = path.join(__dirname, 'recipes-data.json');
+console.log('🔍 Data file path:', DATA_FILE);
 
 // Функция загрузки данных из файла
 const loadRecipes = () => {
@@ -284,6 +285,32 @@ app.delete('/api/recipes/:id', (req, res) => {
   
   console.log(`✅ Recipe ${recipeId} deleted`);
   res.json({ message: 'Recipe deleted successfully' });
+});
+
+// Получить один рецепт по ID
+app.get('/api/recipes/:id', (req, res) => {
+  const recipeId = req.params.id;
+  console.log(`📥 GET /api/recipes/${recipeId}`);
+  
+  // Логи для отладки
+  console.log('🔍 Looking for ID:', recipeId);
+  console.log('🔍 All available IDs:', recipes.map(r => r.id));
+  
+  // Ищем рецепт (с преобразованием типов)
+  const recipe = recipes.find(r => String(r.id) === String(recipeId));
+  
+  if (!recipe) {
+    console.log(`❌ Recipe ${recipeId} not found`);
+    return res.status(404).json({ 
+      error: 'Recipe not found',
+      requestedId: recipeId,
+      availableIds: recipes.map(r => r.id),
+      recipesCount: recipes.length
+    });
+  }
+  
+  console.log(`✅ Found recipe: ${recipe.title}`);
+  res.json(recipe);
 });
 
 // Корневой путь

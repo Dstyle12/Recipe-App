@@ -33,8 +33,16 @@ export const recipeAPI = {
         return response.data
     },
     getById: async (id) => {
-        const response  =  await api.get(`/recipes/${id}`)
+       console.log('🔍 API.getById called with id:', id)
+    console.log('🔍 API.getById constructing URL:', `/recipes/${id}`)
+    try {
+        const response = await api.get(`/recipes/${id}`)
+        console.log('✅ API.getById response:', response.status, response.data)
         return response.data
+    } catch (error) {
+        console.error('❌ API.getById error:', error.response || error.message)
+        throw error
+    }
     },
     create: async (recipeData) => {
     const config = recipeData instanceof FormData ? {} : { headers:{
