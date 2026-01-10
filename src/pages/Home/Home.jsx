@@ -193,7 +193,7 @@ const Home = () =>{
         return (
             <div className='home'>
                 <Header onSortChange={handleSortChange} />
-                <div className="loading">Loading recipes...</div>
+                <div className="home-loading">Loading recipes...</div>
             </div>
         )
     }
@@ -201,7 +201,7 @@ const Home = () =>{
         return (
             <div className='home'>
                 <Header onSortChange={handleSortChange} />
-                <div className="error">Error: {error}</div>
+                <div className="home-error">Error: {error}</div>
             </div>
         )
     }
@@ -230,9 +230,9 @@ const Home = () =>{
               const imageUrl = getImageUrl(recipe)
               const isPinned = recipe.isPinned || false
               return (
-                <div key={recipe.id || `recipe-${Math.random()}`} className='recipe-card' onClick={()=>navigate(`/recipe/${recipe.id}`)}>
+                <div key={recipe.id || `recipe-${Math.random()}`} className='home-recipe-card' onClick={()=>navigate(`/recipe/${recipe.id}`)}>
                   <button 
-                    className={`pin-button ${isPinned ? 'pinned' : ''}`}
+                    className={`home-pin-button ${isPinned ? 'pinned' : ''}`}
                     onClick={(e) => {
                       e.stopPropagation()
                       handlePinRecipe(recipe.id, isPinned)
@@ -241,12 +241,12 @@ const Home = () =>{
                   >
                     {isPinned ? '📌' : '📍'}
                   </button>
-                  <div className='recipe-date'>{formatDate(createdAt)}</div>
+                  <div className='home-recipe-date'>{formatDate(createdAt)}</div>
                   {imageUrl ? (
-                    <img src={imageUrl} alt={safeTitle} className='recipe-image' onError={(e)=>{
+                    <img src={imageUrl} alt={safeTitle} className='home-recipe-image' onError={(e)=>{
                       e.target.style.display = 'none';
                         e.target.parentNode.innerHTML = `
-                          <div class="recipe-image-placeholder">
+                          <div class="home-recipe-image-placeholder">
                             <svg viewBox="0 0 24 24">
                               <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
                             </svg>
@@ -254,18 +254,18 @@ const Home = () =>{
                         `
                     }}></img>
                   ) : (
-                    <div className='recipe-image-placeholder'>
+                    <div className='home-recipe-image-placeholder'>
                        <svg viewBox="0 0 24 24">
                         <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
                       </svg>
                     </div>
                   )}
-                  <div className='recipe-content'>
-                    <h3 className='recipe-title'>
+                  <div className='home-recipe-content'>
+                    <h3 className='home-recipe-title'>
                     {isPinned && <span className="pin-indicator">📌</span>}
                     {safeTitle}
                     </h3>
-                    <p className='recipe-description'>{safeDescription}</p>
+                    <p className='home-recipe-description'>{safeDescription}</p>
                     <div className='recipe-stats'>
                       <div className='stat-item'>
                         <span className='stat-icon'>🥘</span>

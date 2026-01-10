@@ -41,7 +41,7 @@
     "totalWeight": 0,
     "ingredientsCount": 0,
     "isPinned": false,
-    "updatedAt": "2025-12-11T17:51:21.510Z"
+    "updatedAt": "2026-01-08T20:34:07.485Z"
   },
   {
     "id": "1765020938609",
@@ -57,31 +57,31 @@
     "imageUrl": "/uploads/1765020938591-664497263-photo-2024-10-30-21-15-20.jpg",
     "createdAt": "2025-12-06T11:35:38.609Z",
     "totalWeight": 10,
-    "ingredientsCount": 1
+    "ingredientsCount": 1,
+    "isPinned": false,
+    "updatedAt": "2025-12-20T14:48:14.501Z"
   },
   {
     "id": "1765391558609",
-    "title": "Лучезарный",
-    "description": "best man on earth",
+    "title": "Лучезарн",
+    "description": "best man on earth fr fr fr",
     "ingredients": [
       {
-        "ingredientId": 1765391558582.015,
-        "name": "Название ингредиента 1",
-        "amount": "1000g",
+        "name": "Название ингредиента 20000",
+        "amount": "700g",
         "notes": "Quantity: 1"
       },
       {
-        "ingredientId": 1765391558582.1802,
-        "name": "Название ингредиента 2",
-        "amount": "700g",
-        "notes": "Quantity: 1"
+        "name": "Супер пупер ингредиент",
+        "amount": "800g",
+        "notes": "Quantity: 4"
       }
     ],
-    "imageUrl": "/uploads/1765391558595-740310528---------.jpg",
+    "imageUrl": "/uploads/1767904291700-396062155-WIN-20220121-22-06-05-Pro.jpg",
     "createdAt": "2025-12-10T18:32:38.609Z",
-    "updatedAt": "2025-12-17T21:39:53.869Z",
+    "updatedAt": "2026-01-08T20:31:31.743Z",
     "isPinned": false,
-    "totalWeight": 1700,
+    "totalWeight": 1500,
     "ingredientsCount": 2
   }
 ]

@@ -231,30 +231,77 @@ app.put('/api/recipes/:id/pin', (req, res) => {
   res.json(recipes[recipeIndex]);
 });
 
-// Обновить рецепт
-app.put('/api/recipes/:id', (req, res) => {
+// Обновить рецепт (с поддержкой FormData для изображений)
+app.put('/api/recipes/:id', upload.single('image'), (req, res) => {
   const recipeId = req.params.id;
-  const updates = req.body;
   
-  console.log(`✏️ PUT /api/recipes/${recipeId} - Updates:`, updates);
+  console.log(`✏️ PUT /api/recipes/${recipeId} - Body:`, req.body);
+  console.log(`📷 File for update:`, req.file);
   
-  const recipeIndex = recipes.findIndex(r => r.id === recipeId);
+  const recipeIndex = recipes.findIndex(r => String(r.id) === String(recipeId));
   
   if (recipeIndex === -1) {
     return res.status(404).json({ error: 'Recipe not found' });
   }
   
-  // Обновляем рецепт
-  recipes[recipeIndex] = {
-    ...recipes[recipeIndex],
-    ...updates,
-    updatedAt: new Date().toISOString()
-  };
-  
-  saveRecipes(recipes);
-  
-  console.log(`✅ Recipe ${recipeId} updated`);
-  res.json(recipes[recipeIndex]);
+  try {
+    const { title, description, ingredients } = req.body;
+    
+    // Парсим ингредиенты
+    let parsedIngredients = [];
+    try {
+      parsedIngredients = ingredients ? JSON.parse(ingredients) : [];
+    } catch (e) {
+      console.warn('Failed to parse ingredients:', e.message);
+      // Если не удалось распарсить, используем старые ингредиенты
+      parsedIngredients = recipes[recipeIndex].ingredients || [];
+    }
+    
+    // Вычисляем общий вес
+    const calculateTotalWeight = (ingredients) => {
+      return ingredients.reduce((sum, ingredient) => {
+        if (!ingredient || !ingredient.amount) return sum;
+        const amountStr = String(ingredient.amount);
+        const weight = parseFloat(amountStr);
+        return sum + (isNaN(weight) ? 0 : weight);
+      }, 0);
+    };
+    
+    // Обновляем рецепт
+    const updatedRecipe = {
+      ...recipes[recipeIndex],
+      title: title || recipes[recipeIndex].title,
+      description: description || recipes[recipeIndex].description,
+      ingredients: parsedIngredients,
+      totalWeight: calculateTotalWeight(parsedIngredients),
+      ingredientsCount: parsedIngredients.length,
+      updatedAt: new Date().toISOString()
+    };
+    
+    // Если есть новый файл, обновляем imageUrl
+    if (req.file) {
+      // Удаляем старое изображение, если оно есть
+      if (recipes[recipeIndex].imageUrl && recipes[recipeIndex].imageUrl.startsWith('/uploads/')) {
+        const oldImagePath = path.join(__dirname, recipes[recipeIndex].imageUrl);
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+          console.log('🗑️ Deleted old image:', oldImagePath);
+        }
+      }
+      updatedRecipe.imageUrl = `/uploads/${req.file.filename}`;
+    }
+    
+    // Сохраняем обновленный рецепт
+    recipes[recipeIndex] = updatedRecipe;
+    saveRecipes(recipes);
+    
+    console.log(`✅ Recipe ${recipeId} updated:`, updatedRecipe.title);
+    res.json(updatedRecipe);
+    
+  } catch (error) {
+    console.error('❌ Error updating recipe:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // Удалить рецепт

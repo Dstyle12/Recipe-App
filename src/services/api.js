@@ -57,7 +57,8 @@ export const recipeAPI = {
     return response.data
   },
   update: async (id, updates) => {
-    const response = await api.put(`/recipes/${id}`, updates)
+    const config = updates instanceof FormData ? {headers: { 'Content-Type': 'multipart/form-data' }} : {}
+    const response = await api.put(`/recipes/${id}`, updates, config)
     return response.data
   },
   delete: async (id) => {

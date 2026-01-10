@@ -11,7 +11,7 @@
   border-bottom: 2px solid #ffeb3b;
   box-shadow: 0 2px 20px rgba(255, 235, 59, 0.2);
 }
-.back-button {
+.create-recipe-back-button {
   background: rgba(255, 235, 59, 0.1);
   color: #ffeb3b;
   border: 2px solid #ffeb3b;
@@ -22,7 +22,7 @@
   font-size: 1rem;
   font-weight: 600;
 }
-.back-button:hover {
+.create-recipe-back-button:hover {
   background: #ffeb3b;
   color: #1a1a1a;
   transform: translateY(-2px);
@@ -49,10 +49,10 @@
   width: 100%;
   max-width: 600px;
 }
-.image-upload-section {
+.create-recipe-image-upload-section {
   margin-bottom: 2rem;
 }
-.image-upload-area {
+.create-recipe-image-upload-area {
   width: 100%;
   height: 200px;
   border: 2px dashed #ffeb3b;
@@ -64,38 +64,38 @@
   transition: all 0.3s ease;
   overflow: hidden;
 }
-.image-upload-area:hover {
+.create-recipe-image-upload-area:hover {
   border-color: #fff176;
   background: rgba(255, 235, 59, 0.05);
 }
-.image-preview {
+.create-recipe-image-preview {
   width: 100%;
   height: 100%;
 }
-.image-placeholder {
+.create-recipe-image-placeholder {
   text-align: center;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
-.image-hint {
+.create-recipe-image-hint {
   font-size: 0.9rem;
   opacity: 0.8;
 }
-.image-input {
+.create-recipe-image-input {
   display: none;
 }
-.form-group {
+.create-recipe-form-group {
   margin-bottom: 1.5rem;
 }
-.form-label {
+.create-recipe-form-label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
   font-size: 1.1rem;
 }
-.form-input,
-.form-textarea {
+.create-recipe-form-input,
+.create-recipe-form-textarea {
   width: 100%;
   padding: 12px;
   border: 2px solid #ffeb3b;
@@ -105,20 +105,20 @@
   font-size: 1rem;
   transition: all 0.3s ease;
 }
-.form-input:focus,
-.form-textarea:focus {
+.create-recipe-form-input:focus,
+.create-recipe-form-textarea:focus {
   outline: none;
   border-color: #fff176;
   box-shadow: 0 0 0 3px rgba(255, 235, 59, 0.1);
 }
-.form-textarea {
+.create-recipe-form-textarea {
   resize: vertical;
   min-height: 100px;
 }
-.ingredients-section {
+.create-recipe-ingredients-section {
   margin-bottom: 1.5rem;
 }
-.ingredient-item {
+.create-recipe-ingredient-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -128,11 +128,11 @@
   border-radius: 6px;
   margin-bottom: 0.5rem;
 }
-.ingredient-name {
+.create-recipe-ingredient-name {
   font-weight: 600;
   flex: 1;
 }
-.remove-ingredient-btn {
+.create-recipe-remove-ingredient-btn {
   background: rgba(255, 235, 59, 0.1);
   color: #ffeb3b;
   border: 1px solid #ffeb3b;
@@ -145,7 +145,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
-.remove-ingredient-btn:hover {
+.create-recipe-remove-ingredient-btn:hover {
   background: #ffeb3b;
   color: #1a1a1a;
 }
@@ -167,21 +167,21 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(255, 235, 59, 0.3);
 }
-.ingredient-form {
+.create-recipe-ingredient-form {
   background: rgba(26, 26, 26, 0.6);
   padding: 1rem;
   border: 1px solid #ffeb3b;
   border-radius: 8px;
   width: 100%;
 }
-.ingredient-inputs {
+.create-recipe-ingredient-inputs {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 0.5rem;
   margin-bottom: 1rem;
   width: 100%;
 }
-.ingredient-input {
+.create-recipe-ingredient-input {
   padding: 8px;
   border: 1px solid #ffeb3b;
   border-radius: 4px;
@@ -192,7 +192,7 @@
   box-sizing: border-box; 
   min-width: 0; 
 }
-.ingredient-input:focus {
+.create-recipe-ingredient-input:focus {
   outline: none;
   border-color: #fff176;
 }
@@ -265,4 +265,479 @@
   color: #ffeb3b;
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Планшеты (от 768px до 1024px) */
+@media (max-width: 1024px) {
+  .create-recipe-header {
+    padding: 0.9rem 1.5rem;
+  }
+  
+  .create-recipe-title {
+    font-size: 1.8rem;
+    transform: translateX(-40px);
+  }
+  
+  .create-recipe-main {
+    padding: 1.5rem;
+  }
+  
+  .recipe-form {
+    padding: 1.5rem;
+    max-width: 550px;
+  }
+  
+  .create-recipe-image-upload-area {
+    height: 180px;
+  }
+  
+  .create-recipe-form-label {
+    font-size: 1rem;
+  }
+  
+  .create-recipe-form-input,
+  .create-recipe-form-textarea {
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+  
+  .add-ingredient-button {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+  
+  .add-recipe-button {
+    font-size: 1.1rem;
+    padding: 0.9rem;
+  }
+}
+
+/* Маленькие планшеты и крупные телефоны (от 600px до 768px) */
+@media (max-width: 768px) {
+  .create-recipe-header {
+    padding: 0.8rem 1.2rem;
+  }
+  
+  .create-recipe-back-button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .create-recipe-title {
+    font-size: 1.6rem;
+    transform: translateX(-30px);
+  }
+  
+  .create-recipe-main {
+    padding: 1.2rem;
+  }
+  
+  .recipe-form {
+    padding: 1.2rem;
+    max-width: 500px;
+    border-radius: 12px;
+  }
+  
+  .create-recipe-image-upload-area {
+    height: 160px;
+  }
+  
+  .create-recipe-image-hint {
+    font-size: 0.85rem;
+  }
+  
+  .create-recipe-form-label {
+    font-size: 0.95rem;
+  }
+  
+  .create-recipe-form-input,
+  .create-recipe-form-textarea {
+    padding: 9px;
+    font-size: 0.9rem;
+  }
+  
+  .create-recipe-ingredient-inputs {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  
+  .create-recipe-ingredient-input {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+  
+  .ingredient-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .confirm-ingredient-btn,
+  .cancel-ingredient-btn {
+    padding: 10px;
+    width: 100%;
+  }
+  
+  .total-weight {
+    font-size: 1.1rem;
+    padding: 0.8rem;
+  }
+  
+  .add-ingredient-button {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+  
+  .add-recipe-button {
+    font-size: 1rem;
+    padding: 0.8rem;
+  }
+}
+
+/* Средние телефоны (от 480px до 600px) */
+@media (max-width: 600px) {
+  .create-recipe-header {
+    padding: 0.7rem 1rem;
+  }
+  
+  .create-recipe-back-button {
+    padding: 7px 14px;
+    font-size: 0.85rem;
+  }
+  
+  .create-recipe-title {
+    font-size: 1.4rem;
+    transform: translateX(-20px);
+  }
+  
+  .create-recipe-main {
+    padding: 1rem;
+  }
+  
+  .recipe-form {
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  
+  .create-recipe-image-upload-area {
+    height: 140px;
+  }
+  
+  .create-recipe-image-placeholder span:first-child {
+    font-size: 0.9rem;
+  }
+  
+  .create-recipe-image-hint {
+    font-size: 0.8rem;
+  }
+  
+  .create-recipe-form-group {
+    margin-bottom: 1.2rem;
+  }
+  
+  .create-recipe-form-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  .create-recipe-form-input,
+  .create-recipe-form-textarea {
+    padding: 8px;
+    font-size: 0.85rem;
+    border-width: 1.5px;
+  }
+  
+  .create-recipe-ingredient-item {
+    padding: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .create-recipe-ingredient-name {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+  
+  .create-recipe-ingredient-form {
+    padding: 0.8rem;
+  }
+  
+  .create-recipe-ingredient-inputs {
+    gap: 0.6rem;
+  }
+  
+  .create-recipe-ingredient-input {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+  
+  .total-weight {
+    font-size: 1rem;
+    padding: 0.7rem;
+    margin: 1.2rem 0;
+  }
+  
+  .add-recipe-button {
+    font-size: 0.95rem;
+    padding: 0.7rem;
+  }
+}
+
+/* Маленькие телефоны (до 480px) */
+@media (max-width: 480px) {
+  .create-recipe-header {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .create-recipe-back-button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .create-recipe-title {
+    font-size: 1.2rem;
+    transform: translateX(-15px);
+  }
+  
+  .create-recipe-main {
+    padding: 0.8rem;
+  }
+  
+  .recipe-form {
+    padding: 0.8rem;
+    border-radius: 8px;
+  }
+  
+  .create-recipe-image-upload-area {
+    height: 120px;
+    border-width: 1.5px;
+  }
+  
+  .create-recipe-image-placeholder span:first-child {
+    font-size: 0.85rem;
+  }
+  
+  .create-recipe-image-hint {
+    font-size: 0.75rem;
+  }
+  
+  .create-recipe-form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .create-recipe-form-label {
+    font-size: 0.85rem;
+  }
+  
+  .create-recipe-form-input,
+  .create-recipe-form-textarea {
+    padding: 7px;
+    font-size: 0.8rem;
+    border-width: 1px;
+    border-radius: 6px;
+  }
+  
+  .create-recipe-form-textarea {
+    min-height: 80px;
+  }
+  
+  .create-recipe-ingredient-item {
+    padding: 8px;
+    border-radius: 5px;
+  }
+  
+  .create-recipe-ingredient-form {
+    padding: 0.7rem;
+    border-radius: 6px;
+  }
+  
+  .create-recipe-ingredient-inputs {
+    gap: 0.5rem;
+  }
+  
+  .create-recipe-ingredient-input {
+    padding: 7px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+  }
+  
+  .confirm-ingredient-btn,
+  .cancel-ingredient-btn {
+    padding: 8px;
+    font-size: 0.85rem;
+    border-radius: 4px;
+  }
+  
+  .total-weight {
+    font-size: 0.95rem;
+    padding: 0.6rem;
+    border-radius: 6px;
+  }
+  
+  .add-ingredient-button {
+    padding: 8px;
+    font-size: 0.85rem;
+    border-width: 1.5px;
+  }
+  
+  .add-recipe-button {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+    border-width: 1.5px;
+    border-radius: 6px;
+  }
+}
+
+/* Очень маленькие телефоны (до 360px) */
+@media (max-width: 360px) {
+  .create-recipe-header {
+    padding: 0.5rem 0.6rem;
+  }
+  
+  .create-recipe-back-button {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+  
+  .create-recipe-title {
+    font-size: 1.1rem;
+    transform: translateX(-10px);
+  }
+  
+  .create-recipe-main {
+    padding: 0.6rem;
+  }
+  
+  .recipe-form {
+    padding: 0.6rem;
+  }
+  
+  .create-recipe-image-upload-area {
+    height: 100px;
+  }
+  
+  .create-recipe-image-placeholder span:first-child {
+    font-size: 0.8rem;
+  }
+  
+  .create-recipe-image-hint {
+    font-size: 0.7rem;
+  }
+  
+  .create-recipe-form-label {
+    font-size: 0.8rem;
+  }
+  
+  .create-recipe-form-input,
+  .create-recipe-form-textarea {
+    padding: 6px;
+    font-size: 0.75rem;
+  }
+  
+  .create-recipe-ingredient-item {
+    padding: 6px;
+  }
+  
+  .create-recipe-ingredient-form {
+    padding: 0.6rem;
+  }
+  
+  .create-recipe-ingredient-input {
+    padding: 6px;
+    font-size: 0.75rem;
+  }
+  
+  .confirm-ingredient-btn,
+  .cancel-ingredient-btn {
+    padding: 6px;
+    font-size: 0.8rem;
+  }
+  
+  .total-weight {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+  
+  .add-ingredient-button {
+    padding: 6px;
+    font-size: 0.8rem;
+  }
+  
+  .add-recipe-button {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+}
+
+/* Ландшафтная ориентация телефонов */
+@media (max-height: 500px) and (orientation: landscape) {
+  .create-recipe-header {
+    padding: 0.5rem 1rem;
+    height: auto;
+    min-height: 50px;
+  }
+  
+  .create-recipe-back-button {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .create-recipe-title {
+    font-size: 1.2rem;
+    transform: translateX(-30px);
+  }
+  
+  .create-recipe-main {
+    padding: 0.8rem 1rem;
+  }
+  
+  .recipe-form {
+    padding: 0.8rem;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  .create-recipe-image-upload-area {
+    height: 100px;
+  }
+  
+  .create-recipe-form-input,
+  .create-recipe-form-textarea {
+    padding: 6px 8px;
+    font-size: 0.85rem;
+  }
+  
+  .create-recipe-form-textarea {
+    min-height: 60px;
+  }
+}
+
+/* Поддержка очень больших экранов */
+@media (min-width: 2000px) {
+  .recipe-form {
+    max-width: 800px;
+    padding: 3rem;
+  }
+  
+  .create-recipe-image-upload-area {
+    height: 300px;
+  }
+  
+  .create-recipe-form-label {
+    font-size: 1.3rem;
+  }
+  
+  .create-recipe-form-input,
+  .create-recipe-form-textarea {
+    padding: 15px;
+    font-size: 1.1rem;
+  }
+  
+  .add-ingredient-button {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+  }
+  
+  .add-recipe-button {
+    padding: 1.5rem;
+    font-size: 1.4rem;
+  }
 }

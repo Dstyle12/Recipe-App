@@ -78,7 +78,7 @@ const CreateRecipe = () =>{
     try {
     const ingredientsData =
       ingredients.map(ing => ({
-        ingredientId: Date.now() + Math.random(), 
+        name: ing.name, 
         amount: `${ing.weight}g`,
         notes: `Quantity: ${ing.quantity}`
       }))
@@ -105,41 +105,41 @@ const CreateRecipe = () =>{
     return (
         <div className="create-recipe-page">
             <header className="create-recipe-header">
-                <button className="back-button" onClick={()=> navigate('/')}>← Back</button>
+                <button className="create-recipe-back-button" onClick={()=> navigate('/')}>← Back</button>
                 <h1 className="create-recipe-title">Create Recipe</h1>
             </header>
             <main className="create-recipe-main">
                 <div className="recipe-form">
-                    <div className="image-upload-section">
-                        <div className="image-upload-area" onClick={handleImageClick}>
+                    <div className="create-recipe-image-upload-section">
+                        <div className="create-recipe-image-upload-area" onClick={handleImageClick}>
                             {formData.imageUrl ? (
-                                <img src={formData.imageUrl} alt="Recipe review" className="image-preview"></img>
+                                <img src={formData.imageUrl} alt="Recipe review" className="create-recipe-image-preview"></img>
                             ) : (
-                                <div className="image-placeholder">
+                                <div className="create-recipe-image-placeholder">
                                     <span>+ Upload image</span>
-                                    <span className="image-hint">(Optional)</span>
+                                    <span className="create-recipe-image-hint">(Optional)</span>
                                 </div>
                             )}
                         </div>
-                        <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="image-input"></input>
+                        <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="create-recipe-image-input"></input>
                     </div>
                     <div className="form-group">
-                        <label className="form-label">Recipe Name*</label>
-                        <input type="text" value={formData.name} onChange={(e)=> setFormData(prev=>({...prev,name: e.target.value}))} className="form-input" placeholder="Enter recipe name"></input>
+                        <label className="create-recipe-form-label">Recipe Name*</label>
+                        <input type="text" value={formData.name} onChange={(e)=> setFormData(prev=>({...prev,name: e.target.value}))} className="create-recipe-form-input" placeholder="Enter recipe name"></input>
                     </div>
                     <div className="form-group">
-                        <label className="form-label">Description</label>
-                        <textarea value={formData.description} onChange={(e)=>setFormData(prev=>({...prev,description:e.target.value}))} className="form-textarea" placeholder="Enter recipe description(optional)" rows="4"></textarea>
+                        <label className="create-recipe-form-label">Description</label>
+                        <textarea value={formData.description} onChange={(e)=>setFormData(prev=>({...prev,description:e.target.value}))} className="create-recipe-form-textarea" placeholder="Enter recipe description(optional)" rows="4"></textarea>
                     </div>
-                    <div className="ingredients-section">
-                        <label className="form-label">Ingredients</label>
+                    <div className="create-recipe-ingredients-section">
+                        <label className="create-recipe-form-label">Ingredients</label>
                         {ingredients.map((ingredient,index)=>(
-                            <div key={index} className="ingredient-item">
-                                <span className="ingredient-name">{ingredient.name}</span>
-                                <span className="ingredient-details">
+                            <div key={index} className="create-recipe-ingredient-item">
+                                <span className="create-recipe-ingredient-name">{ingredient.name}</span>
+                                <span className="create-recipe-ingredient-details">
                                     {ingredient.weight}g × {ingredient.quantity}
                                 </span>
-                                <button type="button" className="remove-ingredient-btn" onClick={()=> removeIngredient(index)}>−</button>
+                                <button type="button" className="create-recipe-remove-ingredient-btn" onClick={()=> removeIngredient(index)}>−</button>
                             </div>
                         ))}
                         {!isAddingIngredient ? (
@@ -149,9 +149,9 @@ const CreateRecipe = () =>{
                         (
                             <div className="ingredient-form">
                                 <div className="ingredient-inputs">
-                                    <input type="text" value={currentIngredient.name} onChange={(e) => handleIngredientChange('name',e.target.value)}  placeholder="Ingredient name *" className="ingredient-input"></input>
-                                    <input type="number" value={currentIngredient.weight} onChange={(e) => handleIngredientChange('weight',e.target.value)} placeholder="Weight (g) *" className="ingredient-input"></input>
-                                    <input type="number"  value={currentIngredient.quantity} onChange={(e) => handleIngredientChange('quantity',e.target.value)} placeholder="Quantity *" className="ingredient-input"></input>
+                                    <input type="text" value={currentIngredient.name} onChange={(e) => handleIngredientChange('name',e.target.value)}  placeholder="Ingredient name *" className="create-recipe-ingredient-input"></input>
+                                    <input type="number" value={currentIngredient.weight} onChange={(e) => handleIngredientChange('weight',e.target.value)} placeholder="Weight (g) *" className="create-recipe-ingredient-input"></input>
+                                    <input type="number"  value={currentIngredient.quantity} onChange={(e) => handleIngredientChange('quantity',e.target.value)} placeholder="Quantity *" className="create-recipe-ingredient-input"></input>
                                 </div>
                                 <div className="ingredient-actions">
                                     <button type="button" className="confirm-ingredient-btn"  onClick={addIngredient} disabled={!currentIngredient.name || !currentIngredient.weight || !currentIngredient.quantity}>Add</button>
